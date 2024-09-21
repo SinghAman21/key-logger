@@ -37,7 +37,7 @@ If the details are showing you've installed all the necessary modules
 
 To deploy this project in a sneak way follow the instructions
 
-*Create a folder here say ```open_it``` and excute the below instructions in it*
+*Create a folder here say ```open_it``` and execute the below instructions in it*
 
 ### Create a bat file
 
