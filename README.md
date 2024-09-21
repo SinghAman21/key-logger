@@ -1,7 +1,7 @@
-
 # Key Logger
 
 A basic key logger which will captures all the detail typed by physical Keyboard
+```*Disclaimer*: This content is intended for educational purposes only. I am not responsible for any misuse or incorrect implementation of the information provided```
 ## Tech Stack
 
  Python 
