@@ -37,6 +37,8 @@ If the details are showing you've installed all the necessary modules
 
 To deploy this project in a sneak way follow the instructions
 
+*Create a folder here say ```open_it``` and excute the below instructions in it*
+
 ### Create a bat file
 
 Copy the below snippet and make changes as said
@@ -65,4 +67,6 @@ Press ```WIN + R```
 
 Create a shortcut file for ```logger.vbs```
 
-All that remains now is to hide the original folder.
+### Final Step 
+
+Lock and Hide the ```open_it``` folder.
